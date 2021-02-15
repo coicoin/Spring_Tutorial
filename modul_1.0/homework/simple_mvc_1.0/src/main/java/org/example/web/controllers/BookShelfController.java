@@ -6,12 +6,10 @@ import org.example.web.dto.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.comparator.Comparators;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.thymeleaf.util.StringUtils;
 
 import java.util.Comparator;
 
@@ -64,7 +62,7 @@ public class BookShelfController {
         logger.info(value + " " + selectedTypeToRemove);
         switch (selectedTypeToRemove) {
             case "bookIdToRemove":
-                if (bookService.removeBookById(value.isEmpty() ? 0 : Integer.parseInt(value.trim()))) {
+                if (bookService.removeBookById(value.trim().matches("^-?[0-9]+$") ? Integer.parseInt(value.trim()) : 0)) {
                     return "redirect:/books/shelf";
                 }
                 break;
@@ -79,7 +77,7 @@ public class BookShelfController {
                 }
                 break;
             case "bookSizeToRemove":
-                if (bookService.removeBookBySize(value.isEmpty() ? 0 : Integer.parseInt(value.trim()))) {
+                if (bookService.removeBookBySize(value.trim().matches("^-?[0-9]+$") ? Integer.parseInt(value.trim()) : 0)) {
                     return "redirect:/books/shelf";
                 }
                 break;
