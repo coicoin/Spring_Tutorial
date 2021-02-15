@@ -95,7 +95,7 @@
                     </select>
                 </div>
             </tr>
-            <tr th:each="book : ${#lists.sort(bookList, sort)}">
+            <tr th:each="book : ${bookList}">
                 <td th:text="${book.id}"></td>
                 <td th:text="${book.author}"></td>
                 <td th:text="${book.title}"></td>

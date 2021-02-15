@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Comparator;
-
 
 @Controller
 @RequestMapping(value = "/books")
@@ -28,24 +26,9 @@ public class BookShelfController {
 
     @GetMapping("/shelf")
     public String showBooks(@RequestParam(value = "sortType", required = false, defaultValue = "sortById") String sortType, Model model) {
-        logger.info("got book shelf");
+        logger.info("got book shelf with sortType: " + sortType);
         model.addAttribute("book", new Book());
-        model.addAttribute("bookList", bookService.getAllBooks());
-        logger.info("sortType " + sortType);
-        switch (sortType) {
-            case "sortById":
-                model.addAttribute("sort", Comparator.comparing(Book::getId));
-                break;
-            case "sortByAuthor":
-                model.addAttribute("sort", Comparator.comparing(Book::getAuthor));
-                break;
-            case "sortByTitle":
-                model.addAttribute("sort", Comparator.comparing(Book::getTitle));
-                break;
-            case "sortBySize":
-                model.addAttribute("sort", Comparator.comparing(Book::getSize));
-                break;
-        }
+        model.addAttribute("bookList", bookService.getSortedBooks(sortType));
         return "book_shelf";
     }
 
@@ -60,28 +43,7 @@ public class BookShelfController {
     public String removeBook(@RequestParam(value = "value", required = false) String value,
                              @RequestParam(value = "selectedTypeToRemove", required = false) String selectedTypeToRemove) {
         logger.info(value + " " + selectedTypeToRemove);
-        switch (selectedTypeToRemove) {
-            case "bookIdToRemove":
-                if (bookService.removeBookById(value.trim().matches("^-?[0-9]+$") ? Integer.parseInt(value.trim()) : 0)) {
-                    return "redirect:/books/shelf";
-                }
-                break;
-            case "bookAuthorToRemove":
-                if (bookService.removeBookByAuthor(value.trim())) {
-                    return "redirect:/books/shelf";
-                }
-                break;
-            case "bookTitleToRemove":
-                if (bookService.removeBookByTitle(value.trim())) {
-                    return "redirect:/books/shelf";
-                }
-                break;
-            case "bookSizeToRemove":
-                if (bookService.removeBookBySize(value.trim().matches("^-?[0-9]+$") ? Integer.parseInt(value.trim()) : 0)) {
-                    return "redirect:/books/shelf";
-                }
-                break;
-        }
+        bookService.removeBookByOption(selectedTypeToRemove, value);
         return "redirect:/books/shelf";
     }
 }
