@@ -1,0 +1,12 @@
+org\example\app\services\BookService.class
+org\example\app\services\LoginService.class
+org\example\web\controllers\BookShelfController.class
+org\example\app\services\UserService.class
+org\example\web\dto\User.class
+org\example\app\services\ProjectRepository.class
+org\example\app\services\BookRepository.class
+org\example\app\services\UserRepositoryImpl.class
+org\example\web\controllers\UserController.class
+org\example\web\dto\LoginForm.class
+org\example\web\dto\Book.class
+org\example\app\services\UserRepository.class
