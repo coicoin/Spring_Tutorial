@@ -80,16 +80,5 @@ public class BookRepository<E> implements ProjectRepository<Book> {
         return false;
     }
 
-    //remove any book by element
-    /*public boolean removeItemByElementName(String elementName) {
-        for(Book book : retreiveAll()) {
-            if(book.getAuthor().equals(elementName) || book.getTitle().equals(elementName) || book.getSize().toString().equals(elementName)) {
-                logger.info("remove book completed: " + book);
-                return repo.remove(book);
-            }
-        }
-        logger.info(String.format("book with parameter: '%s' not found", elementName));
-        return false;
-    }*/
 
 }
