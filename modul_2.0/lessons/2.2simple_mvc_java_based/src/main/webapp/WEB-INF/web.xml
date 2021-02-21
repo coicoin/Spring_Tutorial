@@ -1,0 +1,45 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <!-- https://habr.com/ru/post/333626/ -->
+  <!-- https://javastudy.ru/spring-mvc/spring-mvc-basic/ -->
+  <!-- https://javastudy.ru/spring-mvc/spring-mvc-viewresolver/ -->
+  <!-- https://javastudy.ru/spring-mvc/spring-mvc-handler-mapping/ -->
+  <!-- https://javastudy.ru/spring-mvc/spring-mvc-viewresolver/ -->
+
+  <display-name>Archetype Created Web Application</display-name>
+
+  <!-- каждый сервлет будет иметь доступ к контекстной переменной в отличии от init-param. Можно получить по param-name getServletContext().getInitParameter("contextConfigLocation") -->
+  <!-- закомментировано так как реализовано в конфиге WebAppInitializer
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:app-config.xml</param-value>
+  </context-param>
+
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>-->
+
+  <!-- закомментировано так как реализовано в конфиге WebAppInitializer
+  <servlet>
+    <servlet-name>my-dispatcher-servlet</servlet-name>
+    <!- путь к java-классу ->
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!- данные которые доступны только внутри конкретного сервлета. Можно получить по param-name getInitParameter("contextConfigLocation") ->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:web-config.xml</param-value>
+    </init-param>
+    <!- приоритет запуска ->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>my-dispatcher-servlet</servlet-name>
+    <!- часть адресной строки(url) вызывающая сервлет ->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>-->
+
+</web-app>
