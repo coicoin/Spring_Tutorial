@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.example.web.dto.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class BookService {
                 bookRepo.removeBySize(value.trim().matches("^-?[0-9]+$") ? Integer.parseInt(value.trim()) : 0);
                 break;
         }
+    }
+
+    public List<Book> getAllSortedBooks(String sortObject, String desc) {
+        return bookRepo.sortByObject(sortObject, StringUtils.equals("true", desc));
     }
 
     public void defaultInit() {

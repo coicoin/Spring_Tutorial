@@ -31,11 +31,14 @@ public class BookShelfController {
     }
 
     @GetMapping("/shelf")
-    public String showBooks(Model model) {
+    public String showBooks(@RequestParam(value = "sortObject", required = false) String sortObject,
+                            @RequestParam(value = "desc", required = false) String desc,
+                            Model model) {
         logger.info(this.toString());
         model.addAttribute("book", new Book());
         model.addAttribute("bookValueToRemove", new BookValueToRemove());
-        model.addAttribute("bookList", bookService.getAllBooks());
+        logger.info("sortObject -> " + sortObject + ", desc -> " + desc);
+        model.addAttribute("sortedBookList", bookService.getAllSortedBooks(sortObject, desc));
         return "book_shelf";
     }
 
@@ -44,7 +47,7 @@ public class BookShelfController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("book", book);
             model.addAttribute("bookValueToRemove", new BookValueToRemove());
-            model.addAttribute("bookList", bookService.getAllBooks());
+            model.addAttribute("sortedBookList", bookService.getAllBooks());
             return "book_shelf";
         } else {
             bookService.saveBook(book);
@@ -58,7 +61,7 @@ public class BookShelfController {
                              @RequestParam(value = "selectedTypeToRemove", required = false) String selectedTypeToRemove) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("book", new Book());
-            model.addAttribute("bookList", bookService.getAllBooks());
+            model.addAttribute("sortedBookList", bookService.getAllBooks());
             return "book_shelf";
         } else {
             logger.info(selectedTypeToRemove + " " + bookValueToRemove.getValueToRemove());

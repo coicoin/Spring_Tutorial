@@ -9,10 +9,12 @@ public interface ProjectRepository<T> {
 
     boolean removeById(Integer bookIdToRemove);
 
-    boolean removeByAuthor(String removeItemByAuthor);
+    boolean removeByAuthor(String bookAuthorToRemove);
 
-    boolean removeByTitle(String removeItemByTitle);
+    boolean removeByTitle(String bookTitleToRemove);
 
-    boolean removeBySize(Integer removeItemBySize);
+    boolean removeBySize(Integer bookSizeToRemove);
+
+    List<T> sortByObject(String sortObject, boolean isDesc);
 
 }

@@ -37,6 +37,21 @@
             font-size: 14px;
         }
 
+        .sort_button {
+            background: transparent;
+            border: none;
+            font-weight: 800;
+        }
+
+        .sort_button:active {
+            color: olive;
+        }
+
+        .sort_button:hover {
+            color: brown;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
@@ -102,20 +117,24 @@
         </table>
     </form>
 
-    <table id="books">
-        <tr>
-            <th>id</th>
-            <th>author</th>
-            <th>title</th>
-            <th>size</th>
-        </tr>
-        <tr th:each="book : ${bookList}">
-            <td th:text="${book.id}"></td>
-            <td th:text="${book.author}"></td>
-            <td th:text="${book.title}"></td>
-            <td th:text="${book.size}"></td>
-        </tr>
-    </table>
+    <form method="get" th:action="@{/books/shelf}">
+        <table id="books" >
+            <tr>
+                <th><input class="sort_button" type="submit" th:name="sortObject" th:value="id"></th>
+                <th><input class="sort_button" type="submit" th:name="sortObject" th:value="author"></th>
+                <th><input class="sort_button" type="submit" th:name="sortObject" th:value="title"></th>
+                <th><input class="sort_button" type="submit" th:name="sortObject" th:value="size"></th>
+                <th><input type="checkbox" th:name="desc" th:value="true">desc</th>
+            </tr>
+            <tr th:each="book : ${sortedBookList}">
+                <td th:text="${book.id}"></td>
+                <td th:text="${book.author}"></td>
+                <td th:text="${book.title}"></td>
+                <td th:text="${book.size}"></td>
+            </tr>
+        </table>
+    </form>
+
 </div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package org.example.app.services;
 
 import org.apache.log4j.Logger;
 import org.example.web.dto.Book;
+import org.h2.util.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -104,6 +105,29 @@ public class BookRepository<E> implements ProjectRepository<Book>, ApplicationCo
         jdbcTemplate.update("DELETE FROM books WHERE size = :size", parameterSource);
         logger.info("remove book completed by size: " + bookSizeToRemove);
         return true;
+    }
+
+    @Override
+    public List<Book> sortByObject(String sortObject, boolean isDesc) {
+        String bookByType;
+        if (sortObject != null && !isDesc) {
+            bookByType = "SELECT * FROM books ORDER BY " + sortObject;
+        } else if (sortObject != null && isDesc) {
+            bookByType = "SELECT * FROM books ORDER BY " + sortObject + " DESC";
+        } else if (sortObject == null && isDesc) {
+            bookByType = "SELECT * FROM books DESC";
+        } else {
+            bookByType = "SELECT * FROM books";
+        }
+        List<Book> books = jdbcTemplate.query(bookByType, (ResultSet rs, int rowNum) -> {
+            Book book = new Book();
+            book.setId(rs.getInt("id"));
+            book.setAuthor(rs.getString("author"));
+            book.setTitle(rs.getString("title"));
+            book.setSize(rs.getInt("size"));
+            return book;
+        });
+        return new ArrayList<>(books);
     }
 
     @Override
