@@ -43,11 +43,12 @@ public class BookShelfController {
     }
 
     @PostMapping("/save")
-    public String saveBook(@Valid Book book, BindingResult bindingResult, Model model) {
+    public String saveBook(@Valid Book book, BindingResult bindingResult, Model model) throws Exception {
         if (bindingResult.hasErrors()) {
             model.addAttribute("book", book);
             model.addAttribute("bookValueToRemove", new BookValueToRemove());
             model.addAttribute("sortedBookList", bookService.getAllBooks());
+            model.addAttribute("files", bookService.getFiles());
             return "book_shelf";
         } else {
             bookService.saveBook(book);
@@ -58,10 +59,11 @@ public class BookShelfController {
 
     @PostMapping("/remove")
     public String removeBook(@Valid BookValueToRemove bookValueToRemove, BindingResult bindingResult, Model model,
-                             @RequestParam(value = "selectedTypeToRemove", required = false) String selectedTypeToRemove) {
+                             @RequestParam(value = "selectedTypeToRemove", required = false) String selectedTypeToRemove) throws Exception {
         if (bindingResult.hasErrors()) {
             model.addAttribute("book", new Book());
             model.addAttribute("sortedBookList", bookService.getAllBooks());
+            model.addAttribute("files", bookService.getFiles());
             return "book_shelf";
         } else {
             logger.info(selectedTypeToRemove + " " + bookValueToRemove.getValueToRemove());
