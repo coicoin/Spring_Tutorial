@@ -12,7 +12,7 @@
         }
 
         #books {
-            width: 50%;
+            width: 90%;
             border-collapse: collapse;
         }
 
@@ -50,6 +50,11 @@
         .sort_button:hover {
             color: brown;
             cursor: pointer;
+        }
+
+        .books_and_files_container {
+            display: grid;
+            grid-template-columns: 60% 40%;
         }
 
     </style>
@@ -117,24 +122,37 @@
         </table>
     </form>
 
-    <form method="get" th:action="@{/books/shelf}">
-        <table id="books" >
-            <tr>
-                <th><input class="sort_button" type="submit" th:name="sortObject" th:value="id"></th>
-                <th><input class="sort_button" type="submit" th:name="sortObject" th:value="author"></th>
-                <th><input class="sort_button" type="submit" th:name="sortObject" th:value="title"></th>
-                <th><input class="sort_button" type="submit" th:name="sortObject" th:value="size"></th>
-                <th><input type="checkbox" th:name="desc" th:value="true">desc</th>
-            </tr>
-            <tr th:each="book : ${sortedBookList}">
-                <td th:text="${book.id}"></td>
-                <td th:text="${book.author}"></td>
-                <td th:text="${book.title}"></td>
-                <td th:text="${book.size}"></td>
-            </tr>
-        </table>
-    </form>
-
+    <div class="books_and_files_container">
+        <form method="get" th:action="@{/books/shelf}">
+            <table id="books" >
+                <tr>
+                    <th><input class="sort_button" type="submit" th:name="sortObject" th:value="id"></th>
+                    <th><input class="sort_button" type="submit" th:name="sortObject" th:value="author"></th>
+                    <th><input class="sort_button" type="submit" th:name="sortObject" th:value="title"></th>
+                    <th><input class="sort_button" type="submit" th:name="sortObject" th:value="size"></th>
+                    <th><input type="checkbox" th:name="desc" th:value="true">desc</th>
+                </tr>
+                <tr th:each="book : ${sortedBookList}">
+                    <td th:text="${book.id}"></td>
+                    <td th:text="${book.author}"></td>
+                    <td th:text="${book.title}"></td>
+                    <td th:text="${book.size}"></td>
+                </tr>
+            </table>
+        </form>
+        <form method="post" th:action="@{/books/download}">
+            <table id="files" >
+                <tr>
+                    <th>file_name</th>
+                    <th>option</th>
+                </tr>
+                <tr th:each="file : ${files}">
+                    <td th:text="${file.getName()}"></td>
+                    <td><button type="submit" th:name="filePath" th:value="${file.getAbsolutePath()}">download</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
 </div>
 </body>
 </html>

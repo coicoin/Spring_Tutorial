@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -46,6 +48,12 @@ public class BookService {
 
     public List<Book> getAllSortedBooks(String sortObject, String desc) {
         return bookRepo.sortByObject(sortObject, StringUtils.equals("true", desc));
+    }
+
+    public List<File> getFiles() throws Exception {
+        String rootPath = System.getProperty("catalina.home");
+        File dir = new File(rootPath + File.separator + "external_uploads");
+        return Arrays.asList(dir.listFiles());
     }
 
     public void defaultInit() {

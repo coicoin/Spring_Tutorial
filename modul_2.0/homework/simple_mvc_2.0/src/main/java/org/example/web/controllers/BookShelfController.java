@@ -7,15 +7,13 @@ import org.example.web.dto.BookValueToRemove;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.*;
 
 
 @Controller
@@ -33,12 +31,14 @@ public class BookShelfController {
     @GetMapping("/shelf")
     public String showBooks(@RequestParam(value = "sortObject", required = false) String sortObject,
                             @RequestParam(value = "desc", required = false) String desc,
-                            Model model) {
+                            Model model) throws Exception {
         logger.info(this.toString());
+        logger.info("sortObject -> " + sortObject + ", desc -> " + desc);
         model.addAttribute("book", new Book());
         model.addAttribute("bookValueToRemove", new BookValueToRemove());
-        logger.info("sortObject -> " + sortObject + ", desc -> " + desc);
         model.addAttribute("sortedBookList", bookService.getAllSortedBooks(sortObject, desc));
+        model.addAttribute("files", bookService.getFiles());
+
         return "book_shelf";
     }
 
@@ -90,6 +90,32 @@ public class BookShelfController {
         stream.close();
 
         logger.info("new file saved at: " + serverFile.getAbsolutePath());
+        return "redirect:/books/shelf";
+    }
+
+    @PostMapping("/download")
+    public String downloadFile(@RequestParam(value = "filePath", required = false) String filePath) throws Exception {
+        if (filePath != null) {
+            File sourceFile = new File(filePath);
+
+            if(sourceFile.exists()) {
+                String rootPath = System.getProperty("catalina.home");
+                File destinationDir = new File(rootPath + File.separator + "local_downloads");
+                File destinationFile = new File(destinationDir.getAbsolutePath() + File.separator + sourceFile.getName());
+
+                if (!destinationDir.exists()) {
+                    destinationDir.mkdir();
+                }
+
+                BufferedInputStream bis = new BufferedInputStream(new FileInputStream(sourceFile));
+                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(destinationFile));
+                FileCopyUtils.copy(bis, bos);
+                bis.close();
+                bos.close();
+
+                logger.info("file was downloaded to local folder: " + destinationFile.getAbsolutePath());
+            }
+        }
         return "redirect:/books/shelf";
     }
 
