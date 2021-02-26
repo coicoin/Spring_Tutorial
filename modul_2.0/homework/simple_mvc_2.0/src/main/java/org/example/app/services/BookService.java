@@ -7,8 +7,12 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
 
 @Service
 public class BookService {
@@ -17,7 +21,7 @@ public class BookService {
     Logger logger = Logger.getLogger(BookService.class);
 
     @Autowired
-    public  BookService(BookRepository<Book> bookRepo) {
+    public BookService(BookRepository<Book> bookRepo) {
         this.bookRepo = bookRepo;
     }
 
@@ -53,7 +57,11 @@ public class BookService {
     public List<File> getFiles() throws Exception {
         String rootPath = System.getProperty("catalina.home");
         File dir = new File(rootPath + File.separator + "external_uploads");
-        return Arrays.asList(dir.listFiles());
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        return ofNullable(dir.listFiles()).map(files -> Arrays.stream(files).collect(Collectors.toList())).orElse(new ArrayList<>());
     }
 
     public void defaultInit() {
